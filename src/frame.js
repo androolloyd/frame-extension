@@ -10,10 +10,6 @@ class EthereumProvider extends WalletConnectProvider {
   constructor () {
     super()
   }
-
-  send (payload) {
-    window.postMessage({ type: 'eth:send', payload }, window.location.origin)
-  }
 }
 //
 // let mmAppear = window.localStorage.getItem('__frameAppearAsMM__')
@@ -63,7 +59,6 @@ try {
     provider.sendAsync = async (payload) => {
       const web3Provider = new providers.Web3Provider(provider)
       const tx = await web3Provider.send(payload.method, payload.params)
-      console.log(tx)
     }
 
     // 4. Enable session (triggers `CLIENT_EVENTS.pairing.proposal` event).
