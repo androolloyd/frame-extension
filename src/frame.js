@@ -1,24 +1,20 @@
-const EthereumProvider = require('@walletconnect/ethereum-provider').default
+const WalletConnectProvider = require('@walletconnect/ethereum-provider').default
 const {Buffer} = require('buffer')
+const {ethers} = require('ethers');
+const {providers} = ethers;
 window.Buffer = Buffer
 // const EventEmitter = require('events')
 // const EthereumProvider = require('ethereum-provider')
 //
-// class Connection extends EventEmitter {
-//   constructor () {
-//     super()
-//     window.addEventListener('message', event => {
-//       if (event && event.source === window && event.data && event.data.type === 'eth:payload') {
-//         this.emit('payload', event.data.payload)
-//       }
-//     })
-//     setTimeout(() => this.emit('connect'), 0)
-//   }
-//
-//   send (payload) {
-//     window.postMessage({ type: 'eth:send', payload }, window.location.origin)
-//   }
-// }
+class EthereumProvider extends WalletConnectProvider {
+  constructor () {
+    super()
+  }
+
+  send (payload) {
+    window.postMessage({ type: 'eth:send', payload }, window.location.origin)
+  }
+}
 //
 // let mmAppear = window.localStorage.getItem('__frameAppearAsMM__')
 //
@@ -51,23 +47,24 @@ window.Buffer = Buffer
 //   }
 // }
 
+
+
 try {
   const main = async () => {
-    // 1. Create a WalletConnect Client
-
-    // 2. Subscribe to client events
-
-
-
     // 3. Create EthereumProvider (with default RPC configuration) by passing in the `client` instance.
     const provider = new EthereumProvider({
       rpc: {
         custom: {
-          1: 'https://eth-mainnet.alchemyapi.io/v2/K3OwSQSaGH_ol2Kpv4eZZP_npFld9wib'
+          1: 'http://erigon.dappnode:8545'
           // ...
         }
       }
     })
+    provider.sendAsync = async (payload) => {
+      const web3Provider = new providers.Web3Provider(provider)
+      const tx = await web3Provider.send(payload.method, payload.params)
+      console.log(tx)
+    }
 
     // 4. Enable session (triggers `CLIENT_EVENTS.pairing.proposal` event).
     // await provider.enable()
