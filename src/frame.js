@@ -63,7 +63,7 @@ try {
     const provider = new EthereumProvider({
       rpc: {
         custom: {
-          1: 'http://erigon.dappnode:8545'
+          1: 'https://eth-mainnet.alchemyapi.io/v2/K3OwSQSaGH_ol2Kpv4eZZP_npFld9wib'
           // ...
         }
       }
